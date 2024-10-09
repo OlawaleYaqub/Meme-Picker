@@ -1,4 +1,6 @@
-import { catsData } from "./data"
+import { catsData } from './data'
+
+console.log(catsData)
 
 function getEmotionsArray(cats){
     const emotionsArray = []
