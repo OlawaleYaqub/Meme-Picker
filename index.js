@@ -1,34 +1,74 @@
-import { catsData } from './data'
+import { catsData } from './data.js'
 
-console.log(catsData)
+const emotionRadios = document.getElementById('emotion-radios')
+const getImgBtn = document.getElementById('get-image-btn')
+const gifOnlyOption = document.getElementById('gifs-only-option')
 
-function getEmotionsArray(cats){
-    const emotionsArray = []
-    for (let cat of cats){
-        for (let emotion of cat.emotionTags){
-            emotionsArray.push(emotion)
-        }
-    }
-    return emotionsArray
+emotionRadios.addEventListener('change',highlightedCheckedOption)
+getImgBtn.addEventListener('click',getMatchingCatsArray)
+
+function getMatchingCatsArray(){
+
+   if(document.querySelector('input[type="radio"]:checked')){
+    const selectedEmotion = document.querySelector('input[type="radio"]:checked').value
+    const isGif = gifOnlyOption.ariaChecked;
+
+const matchingEmo = catsData.filter((emotion)=>{
+return emotion.emotionTags.includes(selectedEmotion)
+})
+
+console.log(matchingEmo)
+   } 
 }
 
-function renderEmotionsRadios(cats){
+function highlightedCheckedOption(e){
+
+const radios = document.getElementsByClassName('highlight')
+
+for(let radio of radios){
+    radio.classList.remove('highlight')
+   
+}
+
+document.getElementById(e.target.id).parentElement.classList.add('highlight')
+
+}
+
+function getEmotionsArray(catsEmotion){
+
+    const catEmotions = []
+    for(let emotions of catsEmotion){
+        for(let cat of emotions.emotionTags){
+            if(!catEmotions.includes(cat))
+                {catEmotions.push(cat)
+
+                }
+        }
+    }
+    return catEmotions
     
+}
+
+
+
+function renderEmotionsRadios(cats){
+    let radioItems = ``
+
     const emotions = getEmotionsArray(cats)
-    console.log(emotions)
-/*
-Challenge:
-1. Have the new function "renderEmotionsRadios" 
-   take in a single parameter. Name that parameter
-   "cats". 
-2. Inside renderEmotionsRadios, set up a const called 
-   "emotions" and set it equals to whatever is returned 
-   by calling getEmotionsArray, passing in "cats" as an 
-   argument.
-3. For now, renderEmotionsRadios should just log out 
-   "emotions".
-4. Call renderEmotionsRadios passing in catsData.
-*/
+
+  for(let emotion of emotions){
+
+    radioItems += `<div class="radio">
+    <label for=${emotion}> ${emotion} </label> 
+    <input    
+    type="radio" 
+    id=${emotion}
+    name="emotion"
+    value=${emotion}>
+ </div>`
+   
+  }
+emotionRadios.innerHTML = radioItems
 }
 
 renderEmotionsRadios(catsData)
